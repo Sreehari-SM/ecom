@@ -1,21 +1,13 @@
-"""ecom URL Configuration
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
+from django.urls import path, include, re_path
 from django.urls import path
 
+admin.site.site_header = "Ecom Accounts Admin"
+admin.site.site_title = "Ecom Accounts Admin"
+admin.site.index_title = "Welcome to Ecom Admin Portal"
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/users', include('api.v1.users.urls', namespace='api_v1_users')),
+    path('api/v1/products', include('api.v1.products.urls', namespace='api_v1_products')),
 ]
