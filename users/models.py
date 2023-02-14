@@ -1,5 +1,6 @@
 from django.db import models
 from general.models import BaseModel
+import uuid
 
 # Create your models here.
 class Profile(BaseModel):
@@ -20,3 +21,23 @@ class Profile(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+class OtpRecord(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    phone = models.CharField(max_length=16)
+    otp = models.PositiveIntegerField()
+    attempts = models.PositiveIntegerField(default=1)
+    is_applied = models.BooleanField(default=False)
+    country = models.ForeignKey('general.Country', on_delete=models.CASCADE, null=True)
+    date_added = models.DateTimeField(db_index=True, auto_now_add=True)
+    date_updated = models.DateTimeField(db_index=True, auto_now_add=True)
+
+    class Meta:
+        db_table = 'users_otp_record'
+        verbose_name = 'Otp Record'
+        verbose_name_plural = 'Otp Records'
+        ordering = ('-date_added',)
+        
+    def __str__(self):
+        return self.phone
