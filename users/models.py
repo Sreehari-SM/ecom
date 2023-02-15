@@ -1,10 +1,14 @@
 from django.db import models
+from django.contrib.auth.models import User, Group
 from general.models import BaseModel
 import uuid
+
+from api.v1.general.functions import get_auto_id
 
 # Create your models here.
 class Profile(BaseModel):
     name = models.CharField(max_length=128, blank=True, null=True)
+    user = models.OneToOneField("auth.User",on_delete=models.CASCADE, blank=True, null=True)
     phone = models.CharField(max_length=128, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     username = models.CharField(max_length=128, blank=True, null=True)
@@ -42,3 +46,56 @@ class OtpRecord(models.Model):
         
     def __str__(self):
         return self.phone
+
+
+class ChiefProfile(BaseModel):
+    name = models.CharField(max_length=128)
+    user = models.OneToOneField("auth.User",on_delete=models.CASCADE, blank=True, null=True)
+    user_name = models.CharField(max_length=128)
+    phone = models.CharField(max_length=128)
+    email = models.EmailField(blank=True, null=True)
+    password = models.TextField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.creator:
+            # First we need create an instance of that and later get the current_request assigned
+            request = RequestMiddleware(get_response=None)
+            request = request.thread_local.current_request
+
+            if self._state.adding:
+                auto_id = get_auto_id(ChiefProfile)
+
+                chief_username = self.username
+                if self.password:
+                    password = decrypt(self.password)
+                else:
+                    password = User.objects.make_random_password(length=12, allowed_chars="abcdefghjkmnpqrstuvwzyx#@*%$ABCDEFGHJKLMNPQRSTUVWXYZ23456789")
+                
+                chief_email = f"{chief_username}@talrop.com"
+
+                user = User.objects.create_user(
+                    username=chief_username,
+                    email=chief_email,
+                    password=password
+                )
+                
+                if self.profile_type == "students_relations_officer":
+                    pa_engineer_group, created = Group.objects.get_or_create(name='students_relations_officer')
+                    pa_engineer_group.user_set.add(user)
+
+                self.creator = request.user
+                self.updater = request.user
+                self.auto_id = auto_id
+                self.user = user
+                self.password = encrypt(password)
+
+        super(ChiefProfile, self).save(*args, **kwargs)
+
+    class Meta:
+        db_table = 'users_chief_profile'
+        verbose_name = 'Chief Profile'
+        verbose_name_plural = 'Chief Profiles'
+        ordering = ('-date_added',)
+        
+    def __str__(self):
+        return self.name

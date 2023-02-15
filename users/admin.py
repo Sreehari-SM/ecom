@@ -13,3 +13,9 @@ class OtpRecordAdmin(admin.ModelAdmin):
     list_display = ('phone', 'otp', 'attempts', 'is_applied')
     search_fields = ('phone', 'otp')
 admin.site.register(OtpRecord, OtpRecordAdmin)
+
+
+class ChiefProfileAdmin(admin.ModelAdmin):
+    list_display = ('phone', 'name', 'user_name', 'email')
+    search_fields = ('phone', 'user_name')
+admin.site.register(ChiefProfile, ChiefProfileAdmin)
