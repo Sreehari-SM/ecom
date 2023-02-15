@@ -8,6 +8,12 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name', 'id')
 admin.site.register(Product, ProductAdmin)
 
+
 class ProductCategoryAdmin(admin.ModelAdmin):
     list_display = ('title', 'slug', 'date_added')
 admin.site.register(ProductCategory, ProductCategoryAdmin)
+
+
+class ProductImageAdmin(admin.ModelAdmin):
+    list_display = ('title', 'image', 'product')
+admin.site.register(ProductImage, ProductImageAdmin)

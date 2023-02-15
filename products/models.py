@@ -32,3 +32,17 @@ class Product(BaseModel):
         
     def __str__(self):
         return self.name
+
+
+class ProductImage(models.Model):
+    title = models.CharField(max_length=128, blank=True, null=True)
+    image = models.ImageField(upload_to='products', blank=True, null=True)
+    product = models.ForeignKey('products.Product', on_delete=models.RESTRICT, blank=True, null=True)
+
+    class Meta:
+        db_table = 'products_product_image'
+        verbose_name = 'Product Image'
+        verbose_name_plural = 'Product Images'
+        
+    def __str__(self):
+        return self.title
