@@ -11,6 +11,7 @@ class Profile(BaseModel):
     password = models.TextField(blank=True, null=True)
     is_verified = models.BooleanField(default=False)
     is_premium = models.BooleanField(default=False)
+    otp = models.PositiveIntegerField(blank=True, null=True)
 
 
     class Meta:
