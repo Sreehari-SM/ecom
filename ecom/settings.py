@@ -13,7 +13,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+#google signup
+SITE_ID = 2
 # Application definition
 
 INSTALLED_APPS = [
@@ -23,6 +24,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
     'rest_framework',
     'users',
     'products',
@@ -40,6 +46,23 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'ecom.urls'
+
+#google signup
+SOCIALACCOUNT_LOGIN_ON_GET=True
+AUTHENTICATION_BACKENDS = [
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
 
 TEMPLATES = [
     {
