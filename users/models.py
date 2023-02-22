@@ -64,31 +64,30 @@ class ChiefProfile(BaseModel):
     profile_type = models.CharField(max_length=128, choices=PROFILE_TYPES, blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        if not self.creator:
 
-            if self._state.adding:
-                auto_id = get_auto_id(ChiefProfile)
+        if self._state.adding:
+            auto_id = get_auto_id(ChiefProfile)
 
-                chief_username = self.username
-                if self.password:
-                    password = decrypt(self.password)
-                else:
-                    password = User.objects.make_random_password(length=12, allowed_chars="abcdefghjkmnpqrstuvwzyx#@*%$ABCDEFGHJKLMNPQRSTUVWXYZ23456789")
-                
-                chief_email = f"{chief_username}@talrop.com"
+            chief_username = self.user_name
+            if self.password:
+                password = decrypt(self.password)
+            else:
+                password = User.objects.make_random_password(length=12, allowed_chars="abcdefghjkmnpqrstuvwzyx#@*%$ABCDEFGHJKLMNPQRSTUVWXYZ23456789")
+            
+            chief_email = f"{chief_username}@talrop.com"
 
-                user = User.objects.create_user(
-                    username=chief_username,
-                    email=chief_email,
-                    password=password
-                )
-                
-                if self.profile_type == "product_manager":
-                    pa_engineer_group, created = Group.objects.get_or_create(name='product_manager')
-                    pa_engineer_group.user_set.add(user)
-                self.auto_id = auto_id
-                self.user = user
-                self.password = encrypt(password)
+            user = User.objects.create_user(
+                username=chief_username,
+                email=chief_email,
+                password=password
+            )
+            
+            if self.profile_type == "product_manager":
+                pa_engineer_group, created = Group.objects.get_or_create(name='product_manager')
+                pa_engineer_group.user_set.add(user)
+            self.auto_id = auto_id
+            self.user = user
+            self.password = encrypt(password)
 
         super(ChiefProfile, self).save(*args, **kwargs)
 
