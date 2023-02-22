@@ -20,5 +20,6 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/v1/users', include('api.v1.users.urls', namespace='api_v1_users')),
     path('api/v1/products', include('api.v1.products.urls', namespace='api_v1_products')),
+    path('api/v1/notifications', include('api.v1.notifications.urls', namespace='api_v1_notifications')),
     path("", include("allauth.urls")), #most important
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
