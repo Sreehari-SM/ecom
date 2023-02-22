@@ -6,6 +6,12 @@ import uuid
 from api.v1.general.functions import get_auto_id
 
 # Create your models here.
+
+PROFILE_TYPES = (
+    ('product_manager', 'Product Manager'),
+)
+
+
 class Profile(BaseModel):
     name = models.CharField(max_length=128, blank=True, null=True)
     user = models.OneToOneField("auth.User",on_delete=models.CASCADE, blank=True, null=True)
@@ -55,12 +61,10 @@ class ChiefProfile(BaseModel):
     phone = models.CharField(max_length=128)
     email = models.EmailField(blank=True, null=True)
     password = models.TextField(blank=True, null=True)
+    profile_type = models.CharField(max_length=128, choices=PROFILE_TYPES, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.creator:
-            # First we need create an instance of that and later get the current_request assigned
-            request = RequestMiddleware(get_response=None)
-            request = request.thread_local.current_request
 
             if self._state.adding:
                 auto_id = get_auto_id(ChiefProfile)
@@ -79,12 +83,9 @@ class ChiefProfile(BaseModel):
                     password=password
                 )
                 
-                if self.profile_type == "students_relations_officer":
-                    pa_engineer_group, created = Group.objects.get_or_create(name='students_relations_officer')
+                if self.profile_type == "product_manager":
+                    pa_engineer_group, created = Group.objects.get_or_create(name='product_manager')
                     pa_engineer_group.user_set.add(user)
-
-                self.creator = request.user
-                self.updater = request.user
                 self.auto_id = auto_id
                 self.user = user
                 self.password = encrypt(password)

@@ -7,6 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-04smc9n(@cm%w1ijg3k%e@p@4v6m0a1_n#@aj=ui+ez12qq9@z'
+ENCRYPT_KEY = 'xvNNEajinuUi7T1aHT9U7eB5IgiKL2cYrC1_kfIZJIE='
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -18,12 +19,14 @@ SITE_ID = 2
 # Application definition
 
 INSTALLED_APPS = [
+    'baton',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'baton.autodiscover',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
