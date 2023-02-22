@@ -3,7 +3,7 @@ from django.contrib.auth.models import User, Group
 from general.models import BaseModel
 import uuid
 
-from api.v1.general.functions import get_auto_id
+from api.v1.general.functions import get_auto_id, encrypt, decrypt
 
 # Create your models here.
 
