@@ -74,7 +74,7 @@ class ChiefProfile(BaseModel):
             else:
                 password = User.objects.make_random_password(length=12, allowed_chars="abcdefghjkmnpqrstuvwzyx#@*%$ABCDEFGHJKLMNPQRSTUVWXYZ23456789")
             
-            chief_email = f"{chief_username}@talrop.com"
+            chief_email = f"{chief_username}@ecom.com"
 
             user = User.objects.create_user(
                 username=chief_username,
