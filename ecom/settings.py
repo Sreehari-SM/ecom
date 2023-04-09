@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'rest_framework',
     'fcm_django',
+    'graphene_django',
     'users',
     'products',
     'general',
