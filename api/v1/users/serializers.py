@@ -7,3 +7,4 @@ class RegisterSerializer(serializers.Serializer):
     phone = serializers.CharField(max_length=16)
     email = serializers.CharField()
     country = serializers.CharField()
+    password = serializers.CharField()

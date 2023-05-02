@@ -1,6 +1,7 @@
 from cryptography.fernet import Fernet
 import base64
 from django.conf import settings
+from random import randint
 
 def get_auto_id(model):
     auto_id = 1
@@ -27,3 +28,9 @@ def decrypt(text):
     decrypted_data = f.decrypt(text).decode("ascii")
 
     return decrypted_data
+
+
+def randomnumber(n):
+    range_start = 10**(n-1)
+    range_end = (10**n)-1
+    return randint(range_start, range_end)
