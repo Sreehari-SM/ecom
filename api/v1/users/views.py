@@ -12,6 +12,7 @@ from api.v1.general.functions import randomnumber
 from django.utils import timezone
 
 
+
 @api_view(['POST'])
 @permission_classes((AllowAny,))
 def signup_enter_details(request):
@@ -67,6 +68,7 @@ def signup_enter_details(request):
                             "message": "successfull",
                         }
                     }
+
             elif Profile.objects.filter(phone=phone, is_verified=True).exists():
                 response_data = {
                     'Statuscode' : 6001,
@@ -85,6 +87,7 @@ def signup_enter_details(request):
                     username = email ,
                     otp = otp             
                 )
+
                 if OtpRecord.objects.filter(phone=phone, is_applied=False).exists():
                     otp_instance = OtpRecord.objects.filter(phone=phone, is_applied=False).latest('date_added')
                     if otp_instance.attempts<=4:
