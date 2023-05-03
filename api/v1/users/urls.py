@@ -1,7 +1,7 @@
 from django.urls import path, include, re_path
 from graphene_django.views import GraphQLView
 from users.schema import schema
-import views
+from . import views
 
 app_name = "api_v1_users"
 
