@@ -19,6 +19,7 @@ SITE_ID = 2
 # Application definition
 
 INSTALLED_APPS = [
+    'oauth2_provider',
     'baton',
     'django.contrib.admin',
     'django.contrib.auth',

@@ -21,8 +21,8 @@ def signup_enter_details(request):
         name = request.data['name']
         phone = request.data['phone']
         email = request.data['email']
-        country = request.data['email']
-        password = request.data['email']
+        country = request.data['country']
+        password = request.data['password']
         if Country.objects.filter(web_code=country).exists():
             country = Country.objects.get(web_code=country)
             if Profile.objects.filter(phone=phone, is_verified=False).exists():
@@ -31,16 +31,16 @@ def signup_enter_details(request):
                     otp_record = OtpRecord.objects.filter(phone=phone, is_applied=False).latest("date_added")
                     if otp_record.attempts <=4:
                         otp = otp_record.otp
-                        otp.attempts += 1
-                        otp.date_updated = timezone.now()
-                        otp.save()
+                        otp_record.attempts += 1
+                        otp_record.date_updated = timezone.now()
+                        otp_record.save()
                         #send this otp using fast2 sms
                         response_data = {
                             "StatusCode": 6000,
                             'data': {
                                 "phone" : phone,
                                 "title": "Success",
-                                "message": "successfull",
+                                "message": "OTP send succesfully",
                             }
                         }
                     else:
@@ -65,7 +65,7 @@ def signup_enter_details(request):
                         'data': {
                             "phone" : phone,
                             "title": "Success",
-                            "message": "successfull",
+                            "message": "OTP send succesfully",
                         }
                     }
 
@@ -85,7 +85,8 @@ def signup_enter_details(request):
                     email = email,  
                     password = password,
                     username = email ,
-                    otp = otp             
+                    otp = otp,
+                    auto_id = get_auto_id(Profile)            
                 )
 
                 if OtpRecord.objects.filter(phone=phone, is_applied=False).exists():
@@ -100,7 +101,7 @@ def signup_enter_details(request):
                             'data': {
                                 "phone" : phone,
                                 "title": "Success",
-                                "message": "successfull",
+                                "message": "OTP send succesfully",
                             }
                         }
                     
@@ -125,7 +126,7 @@ def signup_enter_details(request):
                                     'data': {
                                         "phone" : phone,
                                         "title": "Success",
-                                        "message": "successfull",
+                                        "message": "OTP send succesfully",
                                     }
                                 }
                         else:
@@ -143,7 +144,15 @@ def signup_enter_details(request):
                         otp = otp,
                     )
                     profile.otp = otp_instance.otp
-                    profile.save()             
+                    profile.save() 
+                    response_data = {
+                        "StatusCode": 6000,
+                        'data': {
+                            "phone" : phone,
+                            "title": "Success",
+                            "message": "OTP send succesfully",
+                        }
+                    }            
         else:
             response_data = {
                 'Statuscode' : 6001,
@@ -152,5 +161,14 @@ def signup_enter_details(request):
                     'message' : "Service not available in this country"
                 }
             }
+    else:
+        print("=====serialized._errors=======",serialized_data._errors)
+        response_data = {
+            "StatusCode": 6001,
+            "data":{
+                "title": "Validation Error",
+                "message": serialized_data._errors
+            }
+        }
 
     return Response(response_data, status=status.HTTP_200_OK)
